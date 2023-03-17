@@ -36,6 +36,7 @@
 #include "userial.h"
 #include "userial_vendor.h"
 #include <unistd.h>
+#include <cutils/properties.h>
 
 /******************************************************************************
 **  Constants & Macros
@@ -370,7 +371,23 @@ void userial_vendor_ioctl(userial_vendor_ioctl_op_t op, void *p_data)
 *******************************************************************************/
 int userial_set_port(char *p_conf_name, char *p_conf_value, int param)
 {
-    strcpy(vnd_userial.port_name, p_conf_value);
+    char board_type[PROPERTY_VALUE_MAX];
+    property_get("ro.boot.vendor.board", board_type, "dart");
+
+    if (strncmp(p_conf_name,"BT_SOM_UART", 11) == 0) {
+        ALOGE("Board Type (%s), pconf_name = %s, pconf_value = %s", board_type, p_conf_name, p_conf_value);
+        if (strncmp(board_type, "varsom", 6) == 0) {
+            ALOGE("Updating the serial port for SOM");
+	    strcpy(vnd_userial.port_name, p_conf_value);
+            return 0;
+	}
+	else {
+            ALOGE("Returning");
+            return 0;
+	}
+    } else {
+	    strcpy(vnd_userial.port_name, p_conf_value);
+    }
 
     return 0;
 }

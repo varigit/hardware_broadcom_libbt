@@ -129,6 +129,7 @@ static const conf_entry_t conf_table[] = {
     {"FwPatchFileName", hw_set_patch_file_name, 0},
     {"BT_FIRMWARE_LWB5", hw_set_firmware_prop, 0},
     {"BT_FIRMWARE_LWB", hw_set_firmware_prop, 0},
+    {"BT_SOM_UART", userial_set_port, 0},
 #if (VENDOR_LIB_RUNTIME_TUNING_ENABLED == TRUE)
     {"FwPatchSettlementDelay", hw_set_patch_settlement_delay, 0},
 #endif
